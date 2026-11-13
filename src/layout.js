@@ -25,7 +25,7 @@ export const gateDefinitions = [
   {
     id: "05-L",
     stage: "05",
-    center: [-2, 1.9, -3.4],
+    center: [-2, 2.6, -3.4],
     normal: [0, 1, 0],
     label: "左・水平環",
     radius: 0.7,
@@ -33,7 +33,7 @@ export const gateDefinitions = [
   {
     id: "05-C",
     stage: "05",
-    center: [-0.8, 2.35, -3.4],
+    center: [-0.8, 1.4, -3.4],
     normal: [1, 0, 0],
     label: "中・垂直環",
     radius: 0.7,
@@ -41,7 +41,7 @@ export const gateDefinitions = [
   {
     id: "05-R",
     stage: "05",
-    center: [0.4, 1.9, -3.4],
+    center: [0.4, 2.6, -3.4],
     normal: [0, -1, 0],
     label: "右・水平環",
     radius: 0.7,

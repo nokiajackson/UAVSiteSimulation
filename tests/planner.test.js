@@ -84,6 +84,8 @@ test("stage 05 contains left horizontal, center vertical, right horizontal rings
     [1, 0, 1],
   );
   assert.equal(group[1].normal[0], 1);
+  assert.ok(group[0].center[1] > group[1].center[1] + group[1].radius);
+  assert.ok(group[2].center[1] > group[1].center[1] + group[1].radius);
   for (const g of group) {
     const c = gateCenter(g, [0.1, 0.2]);
     assert.ok(
