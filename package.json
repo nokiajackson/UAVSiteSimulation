@@ -1,0 +1,1 @@
+{"name":"uav-site-simulation","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"vite --host 0.0.0.0","build":"vite build","preview":"vite preview --host 0.0.0.0"},"dependencies":{"@react-three/drei":"^10.7.7","@react-three/fiber":"^9.4.0","react":"^19.2.0","react-dom":"^19.2.0","three":"^0.182.0","lucide-react":"^0.468.0"},"devDependencies":{"vite":"^7.2.2"}}
