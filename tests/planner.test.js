@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {gates,flags,tunnel,plan,start,finish,distance,length,gateCenter} from '../src/planner.js';
+import {gates,flags,tunnel,plan,start,finish,distance,length,gateCenter,gateLead} from '../src/planner.js';
 for(const radius of [.3,.32,.35]) test(`ordered course, slalom clearance and tunnel at radius ${radius}`,()=>{
  const route=plan(radius);
  assert.deepEqual(route.outbound[0],start);assert.deepEqual(route.outbound.at(-1),finish);
@@ -8,7 +8,7 @@ for(const radius of [.3,.32,.35]) test(`ordered course, slalom clearance and tun
  gates.forEach((g,i)=>{
   const entry=route.outbound[1+i*2],exit=route.outbound[2+i*2];
   const dot=p=>p.reduce((sum,v,j)=>sum+(v-g.center[j])*g.normal[j],0);
-  assert.ok(Math.abs(dot(entry)+.34)<1e-9);assert.ok(Math.abs(dot(exit)-.34)<1e-9);
+  assert.ok(Math.abs(dot(entry)+gateLead)<1e-9);assert.ok(Math.abs(dot(exit)-gateLead)<1e-9);
   const middle=entry.map((v,j)=>(v+exit[j])/2);
   assert.ok(distance(middle,g.center)<=g.radius-radius-.05+1e-9);
   if(g.arch)assert.ok(middle[1]>=g.center[1]);
@@ -45,4 +45,17 @@ test('stage 05 contains left horizontal, center vertical, right horizontal rings
  assert.deepEqual(group.map(g=>Math.abs(g.normal[1])),[1,0,1]);
  assert.equal(group[1].normal[0],1);
  for(const g of group){const c=gateCenter(g,[.1,.2]);assert.ok(Math.abs(c.reduce((sum,v,i)=>sum+(v-g.center[i])*g.normal[i],0))<1e-9);}
+});
+
+for(const radius of [.3,.35])test(`compact stage 05 avoids ring material at radius ${radius}`,()=>{
+ const {loop}=plan(radius);
+ for(let i=1;i<loop.length;i++){
+  const a=loop[i-1],b=loop[i],steps=Math.ceil(distance(a,b)/.01);
+  for(let k=0;k<=steps;k++)for(const g of gates.filter(g=>g.stage==='05')){
+   const d=a.map((v,j)=>v+(b[j]-v)*k/steps-g.center[j]);
+   const axial=d.reduce((sum,v,j)=>sum+v*g.normal[j],0);
+   const radial=Math.sqrt(Math.max(0,d.reduce((sum,v)=>sum+v*v,0)-axial*axial));
+   assert.ok(Math.hypot(axial,radial-g.radius)>=radius+.055,`route clips ${g.id}`);
+  }
+ }
 });
